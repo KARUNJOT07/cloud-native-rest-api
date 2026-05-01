@@ -4,14 +4,14 @@ steps:
     args:
       - 'build'
       - '-t'
-      - 'docker.io/KARUNJOT07/flask-api:latest'
+      - 'docker.io/karunjot07/flask-api:latest'
       - '.'
 
   # Push to Docker Hub
   - name: 'gcr.io/cloud-builders/docker'
     args:
       - 'push'
-      - 'docker.io/KARUNJOT07/flask-api:latest'
+      - 'docker.io/karunjot07/flask-api:latest'
 
   # Deploy to GKE
   - name: 'gcr.io/cloud-builders/kubectl'
