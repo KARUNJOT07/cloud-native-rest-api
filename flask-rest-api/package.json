@@ -1,0 +1,24 @@
+{
+  "name": "cloud-native-rest-api",
+  "version": "1.0.0",
+  "description": "Cloud-Native REST API Service for SIT323 Capstone Project",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node app.js"
+  },
+  "keywords": [
+    "rest-api",
+    "cloud-native",
+    "kubernetes",
+    "docker"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}

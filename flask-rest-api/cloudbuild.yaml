@@ -1,0 +1,49 @@
+steps:
+  # Step 1: Build Docker image
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/rest-api-service:$SHORT_SHA'
+      - '-t'
+      - 'gcr.io/$PROJECT_ID/rest-api-service:latest'
+      - '.'
+    id: 'build-image'
+
+  # Step 2: Push image to Google Artifact Registry or Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - 'gcr.io/$PROJECT_ID/rest-api-service:$SHORT_SHA'
+    id: 'push-image'
+
+  # Step 3: Deploy to GKE
+  - name: 'gcr.io/cloud-builders/gke-deploy'
+    args:
+      - 'run'
+      - '--filename=.'
+      - '--image=gcr.io/$PROJECT_ID/rest-api-service:$SHORT_SHA'
+      - '--location=australia-southeast1'  # Replace with your GKE cluster zone
+      - '--cluster=my-cluster'  # Replace with your GKE cluster name
+      - '--namespace=default'
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=australia-southeast1'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=my-cluster'
+    id: 'deploy-gke'
+
+# Build configuration
+timeout: '1800s'
+queueTtl: '3600s'
+
+# Images to be pushed to the registry
+images:
+  - 'gcr.io/$PROJECT_ID/rest-api-service:$SHORT_SHA'
+  - 'gcr.io/$PROJECT_ID/rest-api-service:latest'
+
+# Store logs
+logsBucket: 'gs://$PROJECT_ID-cloud-build-logs'
+
+# Options
+options:
+  machineType: 'N1_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
